@@ -1,0 +1,26 @@
+@model NotesApp.Models.Note
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div style="max-width:720px; margin:0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+        <a href="/Notes" class="btn btn-secondary">← Back</a>
+        <div style="display:flex; gap:0.5rem;">
+            <a href="/Notes/Edit/@Model.Id" class="btn btn-primary">Edit</a>
+            <a href="/Notes/Delete/@Model.Id" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.5rem;">
+            <span style="background:rgba(201,169,110,0.12); color:var(--accent); padding:0.3rem 0.9rem; border-radius:20px; font-size:0.8rem; font-weight:600;">@Model.Category</span>
+            <div style="text-align:right; color:var(--muted); font-size:0.8rem; line-height:1.6;">
+                <div>Created: @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</div>
+                <div>Updated: @Model.UpdatedAt.ToString("MMM dd, yyyy HH:mm")</div>
+            </div>
+        </div>
+        <h1 style="font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:1.25rem; line-height:1.3;">@Model.Title</h1>
+        <div style="color:#ccc9c0; line-height:1.8; white-space:pre-wrap; font-size:0.97rem;">@Model.Content</div>
+    </div>
+</div>

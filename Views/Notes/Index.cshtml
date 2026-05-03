@@ -1,0 +1,66 @@
+@model List<NotesApp.Models.Note>
+@{
+    ViewData["Title"] = "My Notes";
+}
+
+<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+    <div>
+        <h1 class="page-title">My Notes</h1>
+        <p class="page-subtitle">@ViewBag.TotalCount notes total</p>
+    </div>
+    <a href="/Notes/Create" class="btn btn-primary">+ New Note</a>
+</div>
+
+<!-- Search & Filter -->
+<form method="get" action="/Notes" style="display:flex; gap:0.75rem; margin-bottom:2rem; flex-wrap:wrap;">
+    <input type="text" name="search" placeholder="Search notes..." value="@ViewBag.Search"
+           style="flex:1; min-width:200px;" />
+    <select name="category" style="min-width:150px;">
+        <option value="">All Categories</option>
+        @foreach (var cat in ViewBag.Categories as List<string>)
+        {
+            if (ViewBag.Category == cat) {
+                <option value="@cat" selected="selected">@cat</option>
+            } else {
+                <option value="@cat">@cat</option>
+            }
+        }
+    </select>
+    <button type="submit" class="btn btn-secondary">Search</button>
+    @if (!string.IsNullOrEmpty(ViewBag.Search as string) || !string.IsNullOrEmpty(ViewBag.Category as string))
+    {
+        <a href="/Notes" class="btn btn-secondary">Clear</a>
+    }
+</form>
+
+@if (!Model.Any())
+{
+    <div class="card" style="text-align:center; padding:3rem;">
+        <div style="font-size:3rem; margin-bottom:1rem;">📭</div>
+        <p style="color:var(--muted); font-size:1.1rem;">No notes found.</p>
+        <a href="/Notes/Create" class="btn btn-primary" style="margin-top:1rem;">Create your first note</a>
+    </div>
+}
+else
+{
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:1.25rem;">
+        @foreach (var note in Model)
+        {
+            <div class="card" style="display:flex; flex-direction:column; gap:0.75rem; transition:border-color 0.2s; position:relative;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="background:rgba(201,169,110,0.12); color:var(--accent); padding:0.25rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600;">@note.Category</span>
+                    <span style="color:var(--muted); font-size:0.75rem;">@note.UpdatedAt.ToString("MMM dd, yyyy")</span>
+                </div>
+                <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--text);">@note.Title</h3>
+                <p style="color:var(--muted); font-size:0.88rem; line-height:1.6; flex:1;">
+                    @(note.Content.Length > 100 ? note.Content.Substring(0, 100) + "..." : note.Content)
+                </p>
+                <div style="display:flex; gap:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border);">
+                    <a href="/Notes/Details/@note.Id" class="btn btn-secondary" style="flex:1; justify-content:center; font-size:0.82rem; padding:0.5rem;">View</a>
+                    <a href="/Notes/Edit/@note.Id" class="btn btn-secondary" style="flex:1; justify-content:center; font-size:0.82rem; padding:0.5rem;">Edit</a>
+                    <a href="/Notes/Delete/@note.Id" class="btn btn-danger" style="flex:1; justify-content:center; font-size:0.82rem; padding:0.5rem;">Delete</a>
+                </div>
+            </div>
+        }
+    </div>
+}

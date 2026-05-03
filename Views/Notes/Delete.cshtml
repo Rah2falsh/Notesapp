@@ -1,0 +1,29 @@
+@model NotesApp.Models.Note
+@{
+    ViewData["Title"] = "Delete Note";
+}
+
+<div style="max-width:560px; margin:0 auto; text-align:center;">
+    <h1 class="page-title" style="margin-bottom:0.5rem;">Delete Note?</h1>
+    <p style="color:var(--muted); margin-bottom:2rem;">This action cannot be undone.</p>
+
+    <div class="card" style="text-align:left; margin-bottom:2rem;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.75rem;">
+            <span style="background:rgba(201,169,110,0.12); color:var(--accent); padding:0.25rem 0.7rem; border-radius:20px; font-size:0.75rem; font-weight:600;">@Model.Category</span>
+            <span style="color:var(--muted); font-size:0.8rem;">@Model.UpdatedAt.ToString("MMM dd, yyyy")</span>
+        </div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1.2rem; margin-bottom:0.5rem;">@Model.Title</h3>
+        <p style="color:var(--muted); font-size:0.88rem; line-height:1.6;">
+            @(Model.Content.Length > 120 ? Model.Content.Substring(0, 120) + "..." : Model.Content)
+        </p>
+    </div>
+
+    <div style="display:flex; gap:0.75rem; justify-content:center;">
+        <a href="/Notes" class="btn btn-secondary">Cancel</a>
+        <form asp-action="Delete" method="post" style="display:inline;">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-danger" style="padding:0.65rem 2rem;">Yes, Delete</button>
+        </form>
+    </div>
+</div>
